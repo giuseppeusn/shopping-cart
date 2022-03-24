@@ -14,6 +14,7 @@ function createCustomElement(element, className, innerText) {
 
 function cartItemClickListener(event) {
   event.target.remove();
+  localStorage.removeItem('cartItems', event.target);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -35,6 +36,8 @@ const addToCart = async (event) => {
   const item = createCartItemElement({ sku: [obj.id], name: [obj.title], salePrice: [obj.price] });
   const element = document.getElementsByClassName('cart__items')[0];
   element.appendChild(item);
+
+  saveCartItems(element.innerHTML);
 };
 
 function createProductItemElement({ sku, name, image }) {
@@ -67,4 +70,15 @@ const showcase = async () => {
   });
 };
 
-window.onload = () => { showcase(); };
+window.onload = () => { 
+  showcase(); 
+  const element = document.getElementsByClassName('cart__items')[0];
+  element.innerHTML = getSavedCartItems();
+
+  const items = document.querySelectorAll('.cart__items');
+  for (let x = 0; x < items.length; x += 1) {
+    items[x].onclick = cartItemClickListener;
+  }
+
+  // items.forEach((elem) => elem.onclick = cartItemClickListener);
+};
