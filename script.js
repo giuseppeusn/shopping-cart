@@ -13,7 +13,7 @@ function createCustomElement(element, className, innerText) {
 }
 
 const calculatePrice = (price, isSum) => {
-  const elem = document.querySelector('.value');
+  const elem = document.querySelector('.total-price');
 
   let newPrice = 0;
   if (isSum) {
@@ -111,7 +111,7 @@ const cleanCart = () => {
   const cartList = document.querySelector('.cart__items');
   cartList.innerHTML = '';
   localStorage.removeItem('cartItems');
-  const price = document.querySelector('.value');
+  const price = document.querySelector('.total-price');
   price.innerText = 0;
 };
 
