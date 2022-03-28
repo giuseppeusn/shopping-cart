@@ -16,9 +16,9 @@ const calculatePrice = (price, isSum) => {
   const elem = document.querySelector('.total-price');
   const lastPrice = parseFloat(elem.innerText);
 
-  const nwPrice = isSum ? `${(lastPrice + price).toFixed(2)}` : `${(lastPrice - price).toFixed(2)}`;
+  const newPrice = isSum ? (lastPrice + price) : (lastPrice - price);
 
-  elem.innerText = nwPrice;
+  elem.innerText = Math.round(newPrice * 100) / 100;
 };
 
 async function cartItemClickListener(event) {
