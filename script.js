@@ -16,21 +16,22 @@ const calculatePrice = (price, isSum) => {
   const elem = document.querySelector('.total-price');
   const lastPrice = parseFloat(elem.innerText);
 
-  const newPrice = isSum ? `${lastPrice + price}` : `${lastPrice - price}`;
+  const nwPrice = isSum ? `${(lastPrice + price).toFixed(2)}` : `${(lastPrice - price).toFixed(2)}`;
 
-  elem.innerText = newPrice;
+  elem.innerText = nwPrice;
 };
 
-function cartItemClickListener(event) {
+async function cartItemClickListener(event) {
+  event.target.remove();
   const items = JSON.parse(getSavedCartItems() || '[]');
-  const elem = event.target.innerText;
-  const sku = elem.substring(elem.indexOf(':') + 1, elem.indexOf('|')).trim();
+  const sku = event.target.id;
   const removedItem = items.find((item) => item.sku === sku);
   const newItems = items.length > 1 ? items.filter((item) => item.sku !== removedItem.sku) : [];
 
+  const obj = await fetchItem(sku);
+
   saveCartItems(JSON.stringify(newItems));
-  calculatePrice(removedItem.salePrice, false);
-  event.target.remove();
+  calculatePrice(obj.price, false);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -38,6 +39,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
+  li.setAttribute('id', sku);
   return li;
 }
 
@@ -47,7 +49,7 @@ function getSkuFromProductItem(item) {
 
 const addItemLocalStorage = (obj) => {
   const savedItems = JSON.parse(getSavedCartItems() || '[]');
-  const newItem = { sku: obj.id, name: obj.title, salePrice: obj.price };
+  const newItem = { sku: obj.id };
 
   if (savedItems !== null) {
     savedItems.push(newItem);
@@ -57,15 +59,22 @@ const addItemLocalStorage = (obj) => {
   }  
 };
 
-const addToCart = async (event) => {
-  const id = getSkuFromProductItem(event.target.parentNode);
+const getItem = async (id) => {
   const obj = await fetchItem(id);
+  const x = { sku: [obj.id], name: [obj.title], salePrice: [obj.price] };
 
-  const item = createCartItemElement({ sku: [obj.id], name: [obj.title], salePrice: [obj.price] });
+  const cartItem = createCartItemElement(x);
   const element = document.querySelector('.cart__items');
-  element.appendChild(item);
+  element.appendChild(cartItem);
 
   calculatePrice(obj.price, true);
+
+  return obj;
+};
+
+const addToCart = async (event) => {
+  const id = getSkuFromProductItem(event.target.parentNode);
+  const obj = await getItem(id);
   addItemLocalStorage(obj);
 };
 
@@ -124,16 +133,9 @@ const cleanCart = () => {
 };
 
 const showCart = () => {
-  const element = document.getElementsByClassName('cart__items')[0];
   const cart = JSON.parse(getSavedCartItems());
-
   if (cart !== null) {
-    cart.forEach((item) => {
-      const { sku, name, salePrice } = item;
-      const slv = createCartItemElement({ sku, name, salePrice });
-      element.appendChild(slv);
-      calculatePrice(salePrice, true);
-    });
+    cart.forEach((item) => getItem(item.sku));
   }
 };
 
