@@ -93,7 +93,7 @@ const showLoad = () => {
 
 const hideLoad = () => {
   const load = document.querySelector('.loading');
-  load.style.display = 'none';
+  load.remove();
 };
 
 const showcase = async () => {
