@@ -83,8 +83,8 @@ function createProductItemElement({ sku, name, image }) {
   section.className = 'item';
 
   section.appendChild(createCustomElement('span', 'item__sku', sku));
-  section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
+  section.appendChild(createCustomElement('span', 'item__title', name));
   const btn = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
   btn.onclick = addToCart;
   section.appendChild(btn);
@@ -109,12 +109,13 @@ const showcase = async (product) => {
   showLoad();
 
   const obj = await fetchProducts(product);
+  
   await hideLoad();
   const item = obj.results.map((elem) => (
     {
       sku: elem.id,
       name: elem.title,
-      image: elem.thumbnail,
+      image: `https://http2.mlstatic.com/D_${elem.thumbnail_id}-O.jpg`,
     }
   ));
 
