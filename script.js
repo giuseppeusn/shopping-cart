@@ -105,10 +105,10 @@ const hideLoad = () => {
   load.remove();
 };
 
-const showcase = async () => {
+const showcase = async (product) => {
   showLoad();
 
-  const obj = await fetchProducts('computador');
+  const obj = await fetchProducts(product);
   await hideLoad();
   const item = obj.results.map((elem) => (
     {
@@ -139,10 +139,41 @@ const showCart = () => {
   }
 };
 
+const slideCart = () => {
+  const cart = document.querySelector('.cart');
+  cart.classList.toggle('active');
+  const cartTitle = document.querySelector('.container-cartTitle');
+  cartTitle.classList.toggle('active');
+};
+
+const searchProduct = () => {
+  const input = document.getElementById('input-search');
+  
+  if (input.value !== '') {
+    const items = document.querySelector('.items');
+    items.innerHTML = '';
+    showcase(input.value);
+  }  
+};
+
+const onEnter = (event) => {
+  if (event.keyCode === 13) {
+    searchProduct();
+  }
+};
+
 window.onload = () => { 
   showcase();
   showCart();
 
   const emptyCart = document.querySelector('.empty-cart');
   emptyCart.onclick = cleanCart;
+
+  const btn = document.getElementById('cart-btn');
+  btn.onclick = slideCart;
+
+  const input = document.getElementById('input-search');
+  const search = document.getElementById('search');
+  search.onclick = searchProduct;
+  input.onkeyup = onEnter;
 };
