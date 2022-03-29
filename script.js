@@ -122,7 +122,7 @@ const productsObj = (obj) => {
   return item;
 };
 
-const showcase = async (product) => {
+const showcase = async (product = 'computador') => {
   showLoad();
   const obj = await fetchProducts(product);
   hideLoad();

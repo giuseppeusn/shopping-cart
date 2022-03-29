@@ -1,4 +1,4 @@
-const apiURL = (query = 'computador') => `https://api.mercadolibre.com/sites/MLB/search?q=${query}`;
+const apiURL = (query) => `https://api.mercadolibre.com/sites/MLB/search?q=${query}`;
 
 const fetchProducts = async (query) => {
   try {

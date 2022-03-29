@@ -225,3 +225,21 @@ body {
 .btn-secondary:focus {
   background-color: rgb(10, 118, 79);
 }
+
+.count-cart {
+  color: white;
+  position: absolute;
+  background-color: rgb(10, 118, 79);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 20px;
+  margin-left: -15px;
+  margin-top: -5px;
+  border: 3px solid rgb(3, 52, 45);
+}
+
+.count-cart[ type = 'text' ] {
+  margin-top: 50%;
+}
