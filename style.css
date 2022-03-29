@@ -227,7 +227,7 @@ body {
   background-color: rgb(10, 118, 79);
 }
 
-.count-cart {
+#count-cart {
   color: white;
   position: absolute;
   background-color: rgb(10, 118, 79);

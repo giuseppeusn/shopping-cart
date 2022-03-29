@@ -24,6 +24,12 @@ const calculatePrice = (price, isSum) => {
   elem.innerText = Math.round(newPrice * 100) / 100;
 };
 
+const countCart = () => {
+  const items = document.querySelectorAll('.cart__item');
+  const count = document.getElementById('count-cart');
+  count.innerText = items.length;
+};
+
 async function cartItemClickListener(event) {
   event.target.remove();
   const items = JSON.parse(getSavedCartItems() || '[]');
@@ -35,6 +41,7 @@ async function cartItemClickListener(event) {
 
   saveCartItems(JSON.stringify(newItems));
   calculatePrice(obj.price, false);
+  countCart();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -71,6 +78,7 @@ const getItem = async (id) => {
   element.appendChild(cartItem);
 
   calculatePrice(obj.price, true);
+  countCart();
 
   return obj;
 };
@@ -79,6 +87,7 @@ const addToCart = async (event) => {
   const id = getSkuFromProductItem(event.target.parentNode);
   const obj = await getItem(id);
   addItemLocalStorage(obj);
+  countCart();
 };
 
 function createProductItemElement({ sku, name, price, image }) {
@@ -141,6 +150,7 @@ const cleanCart = () => {
   localStorage.removeItem('cartItems');
   const price = document.querySelector('.total-price');
   price.innerText = 0;
+  countCart();
 };
 
 const showCart = () => {
