@@ -95,7 +95,7 @@ body {
   margin: 5px;
   width: 250px;
   border: 2px solid rgb(234, 234, 233);
-  border-radius: 5px;
+  border-radius: 10px;
   box-sizing: border-box;
   background-color: white;
 }
@@ -145,6 +145,7 @@ body {
   margin: 0;
   padding: 10px;
   color: white;
+  border-radius: 0 0 10px 10px;
 }
 
 .cart {
@@ -154,7 +155,7 @@ body {
   right: 0;
   flex-flow: column wrap;
   background-color: rgb(241, 241, 238);
-  height: 0;
+  height: 600px;
   align-self: right;
   opacity: 0;
   transition: all 0.5s;
@@ -238,8 +239,4 @@ body {
   margin-left: -15px;
   margin-top: -5px;
   border: 3px solid rgb(3, 52, 45);
-}
-
-.count-cart[ type = 'text' ] {
-  margin-top: 50%;
 }
