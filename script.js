@@ -163,6 +163,8 @@ const showCart = () => {
 const slideCart = () => {
   const cart = document.querySelector('.cart');
   cart.classList.toggle('active');
+  const cartFooter = document.querySelector('.cart-footer');
+  cartFooter.classList.toggle('active');
 };
 
 const searchProduct = () => {
@@ -181,6 +183,13 @@ const onEnter = (event) => {
   }
 };
 
+const closeCart = () => {
+  const cart = document.querySelector('.cart');
+  cart.classList.remove('active');
+  const cartFooter = document.querySelector('.cart-footer');
+  cartFooter.classList.remove('active');
+};
+
 window.onload = () => { 
   showcase();
   showCart();
@@ -195,4 +204,7 @@ window.onload = () => {
   const search = document.getElementById('search');
   search.onclick = searchProduct;
   input.onkeyup = onEnter;
+
+  const container = document.querySelector('.container');
+  container.onclick = closeCart;
 };

@@ -10,7 +10,7 @@ body {
 }
 
 .header {
-  position: relative;
+  position: fixed;
   background-color: rgb(3, 52, 45);
   display: flex;
   justify-content: space-around;
@@ -85,7 +85,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 40px 0;
+  margin: 100px 0;
 }
 
 .item {
@@ -155,15 +155,15 @@ body {
   right: 0;
   flex-flow: column wrap;
   background-color: rgb(241, 241, 238);
-  height: 600px;
+  height: 0;
   align-self: right;
-  opacity: 0;
+  opacity: 1;
   transition: all 0.5s;
   box-shadow: rgba(0, 0, 0, 0.24) 0 3px 8px;
+  margin-top: 660px;
 }
 
 .cart.active {
-  opacity: 1;
   height: 600px;
 }
 
@@ -181,6 +181,7 @@ body {
   height: 35px;
   border: 2px solid rgb(5, 52, 219);
   background-color: rgb(249, 249, 246);
+  cursor: pointer;
 }
 
 #cart-btn {
@@ -189,10 +190,14 @@ body {
 }
 
 .cart-footer {
-  display: flex;
+  display: none;
   justify-content: space-around;
   align-items: center;
   opacity: 1;
+}
+
+.cart-footer.active {
+  display: flex;
 }
 
 .has-search .form-control {
