@@ -1,6 +1,6 @@
 * {
   box-sizing: border-box;
-  font-family: Epilogue, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
 }
@@ -100,6 +100,14 @@ body {
   background-color: white;
 }
 
+.thumb {
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
 .item .item__sku {
   display: none;
 }
@@ -107,13 +115,27 @@ body {
 .item .item__title {
   display: flex;
   align-items: center;
+  font-size: 15px;
   flex-grow: 1;
   padding: 10px;
+  text-align: start;
+}
+
+.item .item__price {
+  display: flex;
+  align-items: flex-start;
+  font-size: 23px;
+  font-weight: 400;
+  flex-grow: 1;
   text-align: center;
+  flex-direction: column;
+  margin-top: 20px;
+  margin-left: 10px;
 }
 
 .item .item__image {
-  width: 100%;
+  max-width: 230px;
+  max-height: 280px;
 }
 
 .item .item__add {
