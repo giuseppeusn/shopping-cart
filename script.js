@@ -31,9 +31,12 @@ const countCart = () => {
 };
 
 async function cartItemClickListener(event) {
-  event.target.remove();
+  const elem = event.target.classList[0] === 'cart__item' ? event.target : event.path[2];
+  
+  elem.remove();
+  
   const items = JSON.parse(getSavedCartItems() || '[]');
-  const sku = event.target.id;
+  const sku = elem.id;
   const removedItem = items.find((item) => item.sku === sku);
   const newItems = items.length > 1 ? items.filter((item) => item.sku !== removedItem.sku) : [];
 
@@ -44,12 +47,23 @@ async function cartItemClickListener(event) {
   countCart();
 }
 
-function createCartItemElement({ sku, name, salePrice }) {
+function createCartItemElement({ sku, name, salePrice, thumb }) {
   const li = document.createElement('li');
+  const divDesc = document.createElement('div');
+  const divImg = document.createElement('div');
+  divDesc.className = 'cart-desc';
+
+  divImg.className = 'cart-image';
+  divImg.innerHTML = `<img src='${thumb}'>`;
+  const cartName = name[0].length > 40 ? `${name[0].substring(0, 40)}...` : name;
   li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  divDesc.innerHTML = `<p class="cart-name">${name}</p>`;
+  divDesc.innerHTML += `<p class="cart-price">R$ ${salePrice}</p>`;
   li.addEventListener('click', cartItemClickListener);
   li.setAttribute('id', sku);
+  li.appendChild(divDesc);
+  li.appendChild(divImg);
+
   return li;
 }
 
@@ -71,7 +85,7 @@ const addItemLocalStorage = (obj) => {
 
 const getItem = async (id) => {
   const obj = await fetchItem(id);
-  const x = { sku: [obj.id], name: [obj.title], salePrice: [obj.price] };
+  const x = { sku: [obj.id], name: [obj.title], salePrice: [obj.price], thumb: [obj.thumbnail] };
 
   const cartItem = createCartItemElement(x);
   const element = document.querySelector('.cart__items');
