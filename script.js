@@ -1,3 +1,8 @@
+const formatter = new Intl.NumberFormat('pt-BR', {
+  style: 'currency',
+  currency: 'BRL',
+});
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   const div = document.createElement('div');
@@ -17,11 +22,10 @@ function createCustomElement(element, className, innerText) {
 
 const calculatePrice = (price, isSum) => {
   const elem = document.querySelector('.total-price');
-  const lastPrice = parseFloat(elem.innerText);
-
+  const lastPrice = parseFloat(elem.innerText.replace(/[.R$]/g, '').replace(/,/g, '.'));
   const newPrice = isSum ? (lastPrice + price) : (lastPrice - price);
 
-  elem.innerText = Math.round(newPrice * 100) / 100;
+  elem.innerText = formatter.format(newPrice);
 };
 
 const countCart = () => {
@@ -30,13 +34,11 @@ const countCart = () => {
   count.innerText = items.length;
 };
 
-async function cartItemClickListener(event) {
-  const elem = event.target.classList[0] === 'cart__item' ? event.target : event.path[2];
-  
-  elem.remove();
-  
+async function cartItemClickListener() {
+  this.remove();
+
   const items = JSON.parse(getSavedCartItems() || '[]');
-  const sku = elem.id;
+  const sku = this.id;
   const removedItem = items.find((item) => item.sku === sku);
   const newItems = items.length > 1 ? items.filter((item) => item.sku !== removedItem.sku) : [];
 
@@ -55,10 +57,11 @@ function createCartItemElement({ sku, name, salePrice, thumb }) {
 
   divImg.className = 'cart-image';
   divImg.innerHTML = `<img src='${thumb}'>`;
-  const cartName = name[0].length > 40 ? `${name[0].substring(0, 40)}...` : name;
+
   li.className = 'cart__item';
-  divDesc.innerHTML = `<p class="cart-name">${name}</p>`;
-  divDesc.innerHTML += `<p class="cart-price">R$ ${salePrice}</p>`;
+  divDesc.innerHTML = '<span class="remove">&times;<span>';
+  divDesc.innerHTML += `<p class="cart-name">${name}</p>`;
+  divDesc.innerHTML += `<p class="cart-price">${formatter.format(salePrice)}</p>`;
   li.addEventListener('click', cartItemClickListener);
   li.setAttribute('id', sku);
   li.appendChild(divDesc);
@@ -97,8 +100,26 @@ const getItem = async (id) => {
   return obj;
 };
 
+const addSucess = (elem) => {
+  const thumb = elem.querySelector('.thumb');
+
+  thumb.innerHTML += `
+  <div class="wrapper">
+    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+      <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+      <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+    </svg>
+  </div>`;
+  setTimeout(() => {
+    const check = document.querySelector('.wrapper');
+    check.remove();
+  }, 1200);
+};
+
 const addToCart = async (event) => {
   const id = getSkuFromProductItem(event.target.parentNode);
+  addSucess(event.target.parentNode);
+
   const obj = await getItem(id);
   addItemLocalStorage(obj);
   countCart();
@@ -122,7 +143,9 @@ function createProductItemElement({ sku, name, price, image }) {
 const showLoad = () => {
   const item = document.querySelector('.items');
   const load = document.createElement('h3');
-  load.innerText = 'Carregando...';
+  load.innerHTML = `<div id="loader-wrapper">
+  <div id="loader"></div>
+</div>`;
   load.setAttribute('class', 'loading');
   item.appendChild(load);
 };
@@ -137,7 +160,8 @@ const productsObj = (obj) => {
     {
       sku: elem.id,
       name: `${elem.title.length > 50 ? `${elem.title.substring(0, 50)}...` : elem.title}`,
-      price: `R$ ${elem.price % 1 === 0 ? `${elem.price}.00` : elem.price}`,
+      price: formatter.format(elem.price),
+      // price: `R$ ${elem.price % 1 === 0 ? `${elem.price}.00` : elem.price}`,
       image: `https://http2.mlstatic.com/D_${elem.thumbnail_id}-O.jpg`,
     }
   ));
@@ -176,9 +200,15 @@ const showCart = () => {
 
 const slideCart = () => {
   const cart = document.querySelector('.cart');
+  const time = cart.classList[1] === 'active' ? 0 : 300;
   cart.classList.toggle('active');
-  const cartFooter = document.querySelector('.cart-footer');
-  cartFooter.classList.toggle('active');
+
+  setTimeout(() => {
+    const cartFooter = document.querySelector('.cart-footer');
+    cartFooter.classList.toggle('active');
+    const cartTitle = document.querySelector('.cart-title');
+    cartTitle.classList.toggle('active');
+  }, time);
 };
 
 const searchProduct = () => {
