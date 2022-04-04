@@ -110,10 +110,10 @@ const addSucess = (elem) => {
       <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
     </svg>
   </div>`;
+
   setTimeout(() => {
-    const check = document.querySelector('.wrapper');
-    check.remove();
-  }, 1200);
+    thumb.querySelector('.wrapper').remove();
+  }, 1500);
 };
 
 const addToCart = async (event) => {
@@ -187,7 +187,7 @@ const cleanCart = () => {
   cartList.innerHTML = '';
   localStorage.removeItem('cartItems');
   const price = document.querySelector('.total-price');
-  price.innerText = 0;
+  price.innerText = 'R$ 0,00';
   countCart();
 };
 
