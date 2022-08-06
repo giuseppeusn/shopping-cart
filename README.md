@@ -20,3 +20,8 @@ Para visualizar o projeto localmente:
 - Clone o projeto
 - Entre no diretório `shopping-cart/`
 - Abra o arquivo `index.html`
+
+(Opcional) - ESLint e Stylelint:
+- Rode o comando `npm install` para instalar
+- Rode o comando `npm run lint` para rodar o ESLint
+- Rode o comando `npm run lint:style` para rodar o Stylelint
